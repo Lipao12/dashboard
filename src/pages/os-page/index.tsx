@@ -1,6 +1,16 @@
 import { ChangeEvent, useState } from "react";
 import { FilterButton } from "./components/filter-button";
 import { Table } from "./components/table";
+import { OsModal } from "./modal/os-modal";
+
+interface Order {
+  id: string;
+  day: string;
+  technician: string;
+  product: string;
+  hospital: string;
+  status: string;
+}
 
 const orders = [
   {
@@ -80,6 +90,18 @@ const orders = [
 export const OSshower = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filter, setFilter] = useState<string>("Todas");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+  const handleOpenModal = (order: Order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedOrder(null);
+    setShowModal(false);
+  };
 
   const filteredOrders = orders.filter((order) => {
     if (filter !== "Todas" && order.status !== filter) return false;
@@ -122,7 +144,11 @@ export const OSshower = () => {
         ))}
       </div>
 
-      <Table orders={filteredOrders} />
+      <Table orders={filteredOrders} handleOpenModal={handleOpenModal} />
+
+      {showModal && selectedOrder && (
+        <OsModal order={selectedOrder} setShowModal={handleCloseModal} />
+      )}
     </div>
   );
 };

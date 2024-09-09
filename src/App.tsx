@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DashBoard } from "./pages";
 import { OSshower } from "./pages/os-page";
+import { RegisterIndex } from "./pages/register-page";
 import { TechnicianShower } from "./pages/technician-page";
 import { SideBar } from "./sidebar";
 
@@ -15,6 +16,8 @@ export function App() {
         return <OSshower />;
       case "technician":
         return <TechnicianShower />;
+      case "register":
+        return <RegisterIndex />;
       default:
         return <DashBoard />;
     }

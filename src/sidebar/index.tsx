@@ -8,7 +8,7 @@ import {
   BsPeopleFill,
 } from "react-icons/bs";
 import { GoHome, GoHomeFill } from "react-icons/go";
-import { MdLocalHospital } from "react-icons/md";
+import { MdAppRegistration, MdLocalHospital } from "react-icons/md";
 
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
@@ -47,6 +47,12 @@ export const SideBar = ({ setCurrentPage }: SideBarProps) => {
       label: "Inventário",
       icon: <BsBox2 />,
       iconActive: <BsBox2Fill />,
+    },
+    {
+      name: "register",
+      label: "Cadastro",
+      icon: <MdAppRegistration />,
+      iconActive: <MdAppRegistration />,
     },
   ];
 

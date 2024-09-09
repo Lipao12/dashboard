@@ -9,12 +9,13 @@ interface Order {
 
 interface TableProps {
   orders: Order[];
+  handleOpenModal: (order: Order) => void;
 }
 
-export const Table: React.FC<TableProps> = ({ orders }) => (
+export const Table: React.FC<TableProps> = ({ orders, handleOpenModal }) => (
   <>
-    <div className="overflow-x-auto">
-      <table className="min-w-full table-auto bg-[#1C2126] text-gray-300 border border-gray-600 rounded-md shadow-md">
+    <div className="overflow-x-auto rounded-xl border border-gray-600">
+      <table className="min-w-full table-auto bg-[#1C2126] text-gray-300  rounded-md shadow-md">
         <thead>
           <tr>
             <th className="p-4 text-left">Dia</th>
@@ -22,7 +23,7 @@ export const Table: React.FC<TableProps> = ({ orders }) => (
             <th className="p-4 text-left">Equipamento</th>
             <th className="p-4 text-left">Hospital</th>
             <th className="p-4 text-left">Status</th>
-            <th className="p-4 text-left">Detalhe</th>
+            <th className="p-4 text-left">Detalhes</th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +46,13 @@ export const Table: React.FC<TableProps> = ({ orders }) => (
                 </span>
               </td>
               <td className="p-4">
-                <button className="text-blue-400 hover:text-blue-200 transition-colors duration-200">
+                <button
+                  type="button"
+                  className="text-blue-400 hover:text-blue-200 transition-colors duration-200"
+                  onClick={() => {
+                    handleOpenModal(order);
+                  }}
+                >
                   View
                 </button>
               </td>

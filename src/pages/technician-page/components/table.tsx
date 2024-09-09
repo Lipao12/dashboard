@@ -11,8 +11,8 @@ interface TableProps {
 
 export const Table: React.FC<TableProps> = ({ technicians }) => (
   <>
-    <div className="overflow-x-auto">
-      <table className="min-w-full table-auto bg-[#1C2126] text-gray-300 border border-gray-600 rounded-md shadow-md">
+    <div className="overflow-x-auto border border-gray-600 rounded-xl">
+      <table className="min-w-full table-auto bg-[#1C2126] text-gray-300 shadow-md">
         <thead>
           <tr>
             <th className="p-4 text-left">Nome</th>
