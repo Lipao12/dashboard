@@ -4,6 +4,7 @@ import { Table } from "./components/table";
 
 const orders = [
   {
+    id: "0",
     day: "May 1",
     technician: "Dr. John Smith",
     product: "Pacemaker",
@@ -11,6 +12,7 @@ const orders = [
     status: "Progresso",
   },
   {
+    id: "1",
     day: "May 2",
     technician: "Dr. Jane Doe",
     product: "Stethoscope",
@@ -18,6 +20,7 @@ const orders = [
     status: "Progresso",
   },
   {
+    id: "2",
     day: "May 3",
     technician: "Dr. Robert Johnson",
     product: "MRI Scanner",
@@ -25,6 +28,7 @@ const orders = [
     status: "Progresso",
   },
   {
+    id: "3",
     day: "May 4",
     technician: "Dr. Lisa Davis",
     product: "Defibrillator",
@@ -32,6 +36,7 @@ const orders = [
     status: "Progresso",
   },
   {
+    id: "4",
     day: "May 5",
     technician: "Dr. Michael Brown",
     product: "Blood Pressure Monitor",
@@ -39,6 +44,7 @@ const orders = [
     status: "Progresso",
   },
   {
+    id: "5",
     day: "May 6",
     technician: "Dr. Jennifer Miller",
     product: "Ultrasound Machine",
@@ -46,6 +52,7 @@ const orders = [
     status: "Concluido",
   },
   {
+    id: "6",
     day: "May 7",
     technician: "Dr. William Wilson",
     product: "X-Ray Machine",
@@ -53,6 +60,7 @@ const orders = [
     status: "Progresso",
   },
   {
+    id: "7",
     day: "May 8",
     technician: "Dr. Emily Taylor",
     product: "ECG Machine",
@@ -60,6 +68,7 @@ const orders = [
     status: "Progresso",
   },
   {
+    id: "8",
     day: "May 9",
     technician: "Dr. David Martinez",
     product: "Oxygen Concentrator",
