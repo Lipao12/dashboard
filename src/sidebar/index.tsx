@@ -31,7 +31,7 @@ export const SideBar = ({ setCurrentPage }: SideBarProps) => {
       iconActive: <BsClipboardFill />,
     },
     {
-      name: "tecnitians",
+      name: "technician",
       label: "Técnicos",
       icon: <BsPeople />,
       iconActive: <BsPeopleFill />,

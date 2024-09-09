@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DashBoard } from "./pages";
 import { OSshower } from "./pages/os-page";
+import { TechnicianShower } from "./pages/technician-page";
 import { SideBar } from "./sidebar";
 
 export function App() {
@@ -12,6 +13,8 @@ export function App() {
         return <DashBoard />;
       case "serviceorders":
         return <OSshower />;
+      case "technician":
+        return <TechnicianShower />;
       default:
         return <DashBoard />;
     }
@@ -19,7 +22,7 @@ export function App() {
   return (
     <div className="px-8 py-5 mx-auto space-x-4 flex flex-row">
       <SideBar setCurrentPage={setCurrentPage} />
-      <div className="flex-grow w-4/5 border min-h-screen">{renderPage()}</div>
+      <div className="flex-grow w-4/5 min-h-screen">{renderPage()}</div>
     </div>
   );
 }
