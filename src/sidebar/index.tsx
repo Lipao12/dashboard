@@ -10,7 +10,11 @@ import {
 import { GoHome, GoHomeFill } from "react-icons/go";
 import { MdLocalHospital } from "react-icons/md";
 
-export const SideBar = () => {
+interface SideBarProps {
+  setCurrentPage: (page: string) => void;
+}
+
+export const SideBar = ({ setCurrentPage }: SideBarProps) => {
   const [selectedItem, setSelectedItem] = useState("dashboard");
 
   const menuItems = [
@@ -21,7 +25,7 @@ export const SideBar = () => {
       iconActive: <GoHomeFill />,
     },
     {
-      name: "os",
+      name: "serviceorders",
       label: "Ordem de Serviços",
       icon: <BsClipboard />,
       iconActive: <BsClipboardFill />,
@@ -46,7 +50,10 @@ export const SideBar = () => {
     },
   ];
 
-  const handleItemClick = (item: string) => setSelectedItem(item);
+  const handleItemClick = (item: string) => {
+    setSelectedItem(item);
+    setCurrentPage(item);
+  };
 
   return (
     <div className="w-full md:w-1/5 min-h-screen flex flex-col p-4 ">
