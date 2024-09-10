@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { FiDownload, FiUpload } from "react-icons/fi";
-import * as XLSX from "xlsx";
+import {
+  handleExportToExcel,
+  handleImportFromExcel,
+} from "../../helpers/export-import-functions";
 import { HospitalForm } from "./forms/hospital-form";
 import { OSForm } from "./forms/os-form";
 import { StorageForm } from "./forms/storage-form";
@@ -12,21 +15,11 @@ export const RegisterIndex = () => {
     technician: [{ Nome: "", Cargo: "", Email: "" }],
     os: [{ "Número OS": "", "Data Abertura": "", Cliente: "", Técnico: "" }],
     hospital: [{ Nome: "", Endereço: "", Telefone: "" }],
-    stoke: [{ Produto: "", Quantidade: "", Localização: "" }],
+    stock: [{ Produto: "", Quantidade: "", Localização: "" }],
   };
 
   const handleItemClick = (item: string) => {
     setSelectedForm(item);
-  };
-
-  const handleExportToExcel = () => {
-    if (!selectedForm) return;
-
-    const headers = headersMap[selectedForm];
-    const ws = XLSX.utils.json_to_sheet(headers, { skipHeader: false });
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Cadastros");
-    XLSX.writeFile(wb, "cadastros.xlsx");
   };
 
   return (
@@ -69,9 +62,9 @@ export const RegisterIndex = () => {
           <li>
             <button
               className={`w-full text-left px-4 py-2 bg-[#1C2126] hover:bg-gray-700 rounded-md transition-colors duration-300 ${
-                selectedForm === "stoke" ? "bg-[#46505c]" : ""
+                selectedForm === "stock" ? "bg-[#46505c]" : ""
               }`}
-              onClick={() => handleItemClick("stoke")}
+              onClick={() => handleItemClick("stock")}
             >
               Inventário
             </button>
@@ -84,14 +77,21 @@ export const RegisterIndex = () => {
           <div className="flex space-x-4 mt-6 mb-3">
             <button
               type="button"
-              onClick={handleExportToExcel}
+              onClick={() => {
+                handleExportToExcel(headersMap, selectedForm);
+              }}
               className="bg-green-500 text-white px-4 py-2 rounded-md"
             >
               <FiDownload />
               {""}
               <span>Exportar para Excel</span>
             </button>
-            <label className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer">
+            <label
+              className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
+              onClick={() => {
+                handleImportFromExcel();
+              }}
+            >
               <FiUpload />
               {""}
               <span>Importar de Excel</span>
@@ -100,11 +100,11 @@ export const RegisterIndex = () => {
             </label>
           </div>
 
-          <div className="bg-[#1C2126] p-4 rounded-md">
+          <div className="bg-[#1C2126] p-4 rounded-md text-black">
             {selectedForm === "technician" && <TechnicianForm />}
             {selectedForm === "os" && <OSForm />}
             {selectedForm === "hospital" && <HospitalForm />}
-            {selectedForm === "stoke" && <StorageForm />}
+            {selectedForm === "stock" && <StorageForm />}
           </div>
         </>
       )}

@@ -1,7 +1,9 @@
 export const OSForm = () => {
   return (
     <form className="flex flex-col space-y-4">
-      <h2 className="text-2xl font-bold">Cadastro de Ordem de Serviço (OS)</h2>
+      <h2 className="text-2xl font-bold text-white">
+        Cadastro de Ordem de Serviço (OS)
+      </h2>
       <input
         type="text"
         placeholder="Descrição da OS"

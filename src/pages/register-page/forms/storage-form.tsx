@@ -1,7 +1,9 @@
 export const StorageForm = () => {
   return (
     <form className="flex flex-col space-y-4">
-      <h2 className="text-2xl font-bold">Cadastro de Inventário</h2>
+      <h2 className="text-2xl font-bold text-white">
+        Cadastro de Peças para o Inventário
+      </h2>
       <input
         type="text"
         placeholder="Nome do Item"

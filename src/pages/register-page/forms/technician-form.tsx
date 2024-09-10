@@ -1,7 +1,7 @@
 export const TechnicianForm = () => {
   return (
     <form className="flex flex-col space-y-4">
-      <h2 className="text-2xl font-bold">Cadastro de Técnico</h2>
+      <h2 className="text-2xl font-bold text-white">Cadastro de Técnico</h2>
       <input
         type="text"
         placeholder="Nome do Técnico"
