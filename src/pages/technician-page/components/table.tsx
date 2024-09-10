@@ -1,9 +1,4 @@
-interface Technician {
-  id: string;
-  name: string;
-  phone: string;
-  location: string;
-}
+import { Technician } from "../../../types/types";
 
 interface TableProps {
   technicians: Technician[];

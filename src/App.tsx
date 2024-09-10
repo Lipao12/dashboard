@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { OSProvider } from "./context/OSContext";
 import { DashBoard } from "./pages";
 import { OSshower } from "./pages/os-page";
 import { RegisterIndex } from "./pages/register-page";
@@ -13,11 +14,19 @@ export function App() {
       case "dashboard":
         return <DashBoard />;
       case "serviceorders":
-        return <OSshower />;
+        return (
+          <OSProvider>
+            <OSshower />
+          </OSProvider>
+        );
       case "technician":
         return <TechnicianShower />;
       case "register":
-        return <RegisterIndex />;
+        return (
+          <OSProvider>
+            <RegisterIndex />
+          </OSProvider>
+        );
       default:
         return <DashBoard />;
     }
