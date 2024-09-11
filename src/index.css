@@ -5,3 +5,14 @@
 *{
   min-width: 0;
 }
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.2s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

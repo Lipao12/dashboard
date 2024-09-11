@@ -51,7 +51,9 @@ export const OSshower = () => {
       <Table orders={filteredOrders} handleOpenModal={handleOpenModal} />
 
       {showModal && selectedOrder && (
-        <OsModal order={selectedOrder} setShowModal={handleCloseModal} />
+        <div className="fade-in">
+          <OsModal order={selectedOrder} setShowModal={handleCloseModal} />
+        </div>
       )}
     </div>
   );
