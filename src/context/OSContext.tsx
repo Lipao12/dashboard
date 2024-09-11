@@ -7,6 +7,7 @@ interface OSContextProps {
   filter: string;
   showModal: boolean;
   selectedOrder: Order | null;
+  orderQnt: number;
   setSearchTerm: (term: string) => void;
   setFilter: (status: string) => void;
   handleOpenModal: (order: Order) => void;
@@ -89,9 +90,14 @@ const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [filter, setFilter] = useState<string>("Todas");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [orderQnt, setOrderQnt] = useState(orders.length);
 
   const addOrder = (newOrder: Order) => {
-    setOrders((prevOrders) => [...prevOrders, newOrder]);
+    setOrders((prevOrders) => {
+      const updatedOrders = [...prevOrders, newOrder];
+      setOrderQnt(updatedOrders.length);
+      return updatedOrders;
+    });
   };
 
   const handleOpenModal = (order: Order) => {
@@ -122,6 +128,7 @@ const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         filter,
         showModal,
         selectedOrder,
+        orderQnt,
         setSearchTerm,
         setFilter,
         handleOpenModal,
