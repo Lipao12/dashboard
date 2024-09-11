@@ -1,10 +1,6 @@
 import { useState } from "react";
-import { FiDownload, FiUpload, FiX } from "react-icons/fi";
-import { useOSContext } from "../../context/OSContext";
-import {
-  handleExportToExcel,
-  handleImportFromExcel,
-} from "../../helpers/export-import-functions";
+import { FiDownload, FiX } from "react-icons/fi";
+import { handleExportToExcel } from "../../helpers/export-import-functions";
 import { HospitalForm } from "./forms/hospital-form";
 import { OSForm } from "./forms/os-form";
 import { StorageForm } from "./forms/storage-form";
@@ -12,9 +8,6 @@ import { TechnicianForm } from "./forms/technician-form";
 
 export const RegisterIndex = () => {
   const [selectedForm, setSelectedForm] = useState<string | null>(null);
-  const [excelData, setExcelData] = useState<any[]>([]);
-
-  const { addOrder, orderQnt } = useOSContext();
 
   const headersMap: Record<string, Array<Record<string, string>>> = {
     technician: [{ Nome: "", Cargo: "", Email: "" }],
@@ -88,42 +81,12 @@ export const RegisterIndex = () => {
                 onClick={() => {
                   handleExportToExcel(headersMap, selectedForm);
                 }}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400 transition duration-300"
+                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400 transition duration-300 flex flex-row space-x-2 items-center"
               >
                 <FiDownload />
                 {""}
-                <span>Exportar para Excel</span>
+                <span>Exportar Dados Para Excel</span>
               </button>
-              <label className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-400 transition duration-300">
-                <FiUpload />
-                {""}
-                <span>Importar de Excel</span>
-                {""}
-                <input
-                  type="file"
-                  accept=".xlsx, .xls"
-                  className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files) {
-                      if (selectedForm === "os") {
-                        handleImportFromExcel(
-                          e.target.files[0],
-                          selectedForm,
-                          setExcelData,
-                          addOrder,
-                          orderQnt
-                        );
-                      } else {
-                        handleImportFromExcel(
-                          e.target.files[0],
-                          selectedForm,
-                          setExcelData
-                        );
-                      }
-                    }
-                  }}
-                />
-              </label>
             </div>
             <button
               type="button"

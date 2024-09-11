@@ -8,10 +8,31 @@ export const handleExportToExcel = (headersMap: any, selectedForm: string) => {
   XLSX.writeFile(wb, "cadastros.xlsx");
 };
 
+export const handleExportDataToExcel = (headersMapping: any, data: any) => {
+  // Mapeia os dados do JSON para corresponder aos cabeçalhos
+  const mappedData = data.map((item: any) => {
+    const mappedItem: any = {};
+    Object.keys(headersMapping).forEach((key) => {
+      mappedItem[headersMapping[key]] = item[key];
+    });
+    return mappedItem;
+  });
+  const ws = XLSX.utils.json_to_sheet(mappedData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Dados Das Ordens de Serviços");
+  XLSX.writeFile(wb, "ordens-de-servicos.xlsx");
+};
+
+export const handleExportModelToExcel = (headers: any) => {
+  const ws = XLSX.utils.json_to_sheet(headers, { skipHeader: false });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Cadastros");
+  XLSX.writeFile(wb, "cadastros.xlsx");
+};
+
 export const handleImportFromExcel = (
   file: File,
   selectedForm: string,
-  setExcelData: any,
   addFileToContext: null | any = null,
   orderQnt: number | null = null
 ) => {
@@ -24,7 +45,6 @@ export const handleImportFromExcel = (
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-    setExcelData(jsonData);
     jsonData.forEach((x) => {
       console.log(x);
     });
