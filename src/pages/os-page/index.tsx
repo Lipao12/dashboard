@@ -31,7 +31,7 @@ export const OSshower = () => {
 
       <input
         type="text"
-        placeholder="Pesquise por hospital..."
+        placeholder="Pesquise por hospital, técnico ou equipamento..."
         className="w-full mb-4 p-2 border rounded-md bg-gray-800 text-white"
         value={searchTerm}
         onChange={handleSearchChange}
@@ -48,7 +48,11 @@ export const OSshower = () => {
         ))}
       </div>
 
-      <Table orders={filteredOrders} handleOpenModal={handleOpenModal} />
+      {filteredOrders.length === 0 ? (
+        <p className="text-gray-400">Nenhuma ordem de serviço encontrada.</p>
+      ) : (
+        <Table orders={filteredOrders} handleOpenModal={handleOpenModal} />
+      )}
 
       {showModal && selectedOrder && (
         <div className="fade-in">

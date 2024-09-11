@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { FiDownload, FiX } from "react-icons/fi";
-import { handleExportToExcel } from "../../helpers/export-import-functions";
+import { FiX } from "react-icons/fi";
 import { HospitalForm } from "./forms/hospital-form";
 import { OSForm } from "./forms/os-form";
 import { StorageForm } from "./forms/storage-form";
@@ -74,20 +73,7 @@ export const RegisterIndex = () => {
 
       {selectedForm && (
         <div className="fade-in transition duration-100">
-          <div className="flex flex-row justify-between mx-3">
-            <div className="flex space-x-4 mt-6 mb-3">
-              <button
-                type="button"
-                onClick={() => {
-                  handleExportToExcel(headersMap, selectedForm);
-                }}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400 transition duration-300 flex flex-row space-x-2 items-center"
-              >
-                <FiDownload />
-                {""}
-                <span>Exportar Dados Para Excel</span>
-              </button>
-            </div>
+          <div className="flex flex-row justify-end mx-3 mb-3">
             <button
               type="button"
               onClick={() => {

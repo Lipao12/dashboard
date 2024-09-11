@@ -13,3 +13,12 @@ export interface Technician {
     phone: string;
     location: string;
   }
+
+  export interface Hospital {
+    id: string;
+    name: string;
+    city: string;
+    department: string;
+    phone: string;
+    address: string;
+  }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { OSProvider } from "./context/OSContext";
 import { DashBoard } from "./pages";
+import { HospitalShower } from "./pages/hospital-page";
 import { OSshower } from "./pages/os-page";
 import { RegisterIndex } from "./pages/register-page";
 import { TechnicianShower } from "./pages/technician-page";
@@ -21,6 +22,8 @@ export function App() {
         );
       case "technician":
         return <TechnicianShower />;
+      case "hospital":
+        return <HospitalShower />;
       case "register":
         return (
           <OSProvider>
