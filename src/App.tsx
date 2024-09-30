@@ -3,6 +3,7 @@ import { OSProvider } from "./context/OSContext";
 import { DashBoard } from "./pages";
 import { HospitalShower } from "./pages/hospital-page";
 import { OSshower } from "./pages/os-page";
+import { StockShower } from "./pages/prod-stock";
 import { RegisterIndex } from "./pages/register-page";
 import { TechnicianShower } from "./pages/technician-page";
 import { SideBar } from "./sidebar";
@@ -24,6 +25,8 @@ export function App() {
         return <TechnicianShower />;
       case "hospital":
         return <HospitalShower />;
+      case "inventary":
+        return <StockShower />;
       case "register":
         return (
           <OSProvider>

@@ -20,8 +20,8 @@ export const RegisterIndex = () => {
   };
 
   return (
-    <div className="flex flex-col p-6">
-      <h1 className="text-3xl font-bold mb-4">Cadastro</h1>
+    <div className="flex flex-col p-4">
+      <h1 className="text-2xl font-bold mb-4">Cadastro</h1>
 
       <div className="mb-6">
         <ul className="space-y-2">
