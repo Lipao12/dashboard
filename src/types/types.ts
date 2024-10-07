@@ -5,6 +5,7 @@ export interface Order {
     product: string;
     hospital: string;
     status: string;
+    priority: string
   }
 
 export interface Technician {

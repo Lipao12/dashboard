@@ -21,6 +21,7 @@ export const OSForm = () => {
     product: "",
     hospital: "",
     status: "Progresso",
+    priority: "Média",
   });
 
   const headersMapping: any = {
@@ -37,7 +38,9 @@ export const OSForm = () => {
     setShowImportButton(!showImportButton);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setNewOrder((prevOrder) => ({
       ...prevOrder,
@@ -67,6 +70,7 @@ export const OSForm = () => {
       product: "",
       hospital: "",
       status: "Progresso",
+      priority: "Média",
     });
   };
 
@@ -181,6 +185,25 @@ export const OSForm = () => {
         placeholder="Hospital"
         required
       />
+      <div className="flex flex-col">
+        <label htmlFor="priority" className="text-gray-300 mb-2">
+          Prioridade
+        </label>
+
+        <select
+          id="priority"
+          name="priority"
+          className="p-2 border rounded-md"
+          value={newOrder.priority}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="Urgente">Urgente</option>
+          <option value="Alta">Alta</option>
+          <option value="Média">Média</option>
+          <option value="Baixa">Baixa</option>
+        </select>
+      </div>
 
       <button
         type="submit"

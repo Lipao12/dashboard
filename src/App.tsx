@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { OSProvider } from "./context/OSContext";
-import { DashBoard } from "./pages";
+import { Dashboard } from "./pages/dash-page";
 import { HospitalShower } from "./pages/hospital-page";
 import { OSshower } from "./pages/os-page";
 import { StockShower } from "./pages/prod-stock";
@@ -14,7 +14,11 @@ export function App() {
   const renderPage = () => {
     switch (currentPage) {
       case "dashboard":
-        return <DashBoard />;
+        return (
+          <OSProvider>
+            <Dashboard />
+          </OSProvider>
+        );
       case "serviceorders":
         return (
           <OSProvider>
@@ -34,7 +38,7 @@ export function App() {
           </OSProvider>
         );
       default:
-        return <DashBoard />;
+        return <Dashboard />;
     }
   };
   return (

@@ -1,11 +1,4 @@
-interface Order {
-  id: string;
-  day: string;
-  technician: string;
-  product: string;
-  hospital: string;
-  status: string;
-}
+import { Order } from "../../../types/types";
 
 interface TableProps {
   orders: Order[];
