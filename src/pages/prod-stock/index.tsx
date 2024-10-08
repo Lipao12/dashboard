@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import * as XLSX from "xlsx";
+import { useEffect, useState } from "react";
+import { readDataOnce } from "../../lib/api";
 import { Table } from "./components/table";
 
 export const StockShower = () => {
-  const [data, setData] = useState<any[]>([]); // Armazena os dados do XLS
+  const [data, setData] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useState<string>(searchTerm);
@@ -11,6 +11,8 @@ export const StockShower = () => {
   // Estados para controlar a paginação
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Número de itens por página
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -22,22 +24,14 @@ export const StockShower = () => {
     };
   }, [searchTerm]);
 
-  // Função para carregar o arquivo XLS
-  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = new Uint8Array(event.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, { type: "array" });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-        setData(jsonData as any[]);
-      };
-      reader.readAsArrayBuffer(file);
-    }
-  };
+  useEffect(() => {
+    readDataOnce(`estoque/`).then((data: any) => {
+      if (data) {
+        setData(data);
+        setLoading(false);
+      }
+    });
+  }, []);
 
   // Filtragem dos itens
   const filteredData = data.filter((item) => {
@@ -66,7 +60,6 @@ export const StockShower = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Estoque</h1>
-
       {/* Campo de busca */}
       <input
         type="text"
@@ -77,44 +70,67 @@ export const StockShower = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      {/* Upload do arquivo XLS */}
-      <label>
-        {""}
-        <input
-          type="file"
-          accept=".xlsx, .xls"
-          onChange={handleFileUpload}
-          className="mb-4"
-        />
-      </label>
-
-      {/* Tabela de resultados */}
-      {currentItems.length === 0 ? (
+      {/* Carregando... */}
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
+          <span className="text-white ml-4">Carregando dados...</span>
+        </div>
+      ) : currentItems.length === 0 ? (
         <p className="text-gray-400">Nenhum item encontrado.</p>
       ) : (
-        <Table items={currentItems} />
-      )}
+        <>
+          {/* Tabela de resultados */}
+          <Table items={currentItems} />
 
-      {/* Botões de paginação */}
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={prevPage}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-700 text-white rounded-md disabled:opacity-50"
-        >
-          Anterior
-        </button>
-        <span className="text-white">
-          Página {currentPage} de {totalPages}
-        </span>
-        <button
-          onClick={nextPage}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-700 text-white rounded-md disabled:opacity-50"
-        >
-          Próxima
-        </button>
-      </div>
+          {/* Botões de paginação */}
+          <div className="flex justify-between mt-4">
+            <div className="space-x-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (currentPage > 1) setCurrentPage(1);
+                }}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md disabled:opacity-50"
+              >
+                Primeira
+              </button>
+              <button
+                type="button"
+                onClick={prevPage}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md disabled:opacity-50"
+              >
+                Anterior
+              </button>
+            </div>
+            <span className="text-white">
+              Página {currentPage} de {totalPages}
+            </span>
+            <div className="space-x-2">
+              <button
+                type="button"
+                onClick={nextPage}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md disabled:opacity-50"
+              >
+                Próxima
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (currentPage < totalPages) setCurrentPage(totalPages);
+                }}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md disabled:opacity-50"
+              >
+                Última
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

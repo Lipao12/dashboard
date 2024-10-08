@@ -4,6 +4,13 @@ interface TableProps {
   items: any[];
 }
 
+interface Item {
+  id: string;
+  nome: string;
+  preco: number;
+  [key: string]: any;
+}
+
 export const Table: React.FC<TableProps> = ({ items }) => {
   const columnsToRemove = [
     "Part Number",
@@ -16,9 +23,22 @@ export const Table: React.FC<TableProps> = ({ items }) => {
     "Valor Total Venda R$",
   ];
 
+  const headerMap: { [key: string]: string } = {
+    id: "ID",
+    nome: "Nome do Produto",
+    preco: "Valor do Produto",
+  };
+
   // Função que filtra as colunas removidas
-  const filterColumns = (data: any) => {
+  const filterColumns = (data: Item) => {
     return Object.keys(data).filter((key) => !columnsToRemove.includes(key));
+  };
+
+  const formatCurrency = (value: number) => {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
   };
 
   return (
@@ -29,7 +49,7 @@ export const Table: React.FC<TableProps> = ({ items }) => {
             {/* Renderiza cabeçalhos, exceto as colunas removidas */}
             {filterColumns(items[0]).map((key) => (
               <th key={key} className="p-4 text-left">
-                {key}
+                {headerMap[key]}
               </th>
             ))}
           </tr>
@@ -43,7 +63,7 @@ export const Table: React.FC<TableProps> = ({ items }) => {
               {/* Renderiza os valores, exceto as colunas removidas */}
               {filterColumns(item).map((key) => (
                 <td key={key} className="p-4">
-                  {item[key]}
+                  {key === "preco" ? formatCurrency(item[key]) : item[key]}
                 </td>
               ))}
             </tr>
