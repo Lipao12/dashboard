@@ -11,8 +11,8 @@ export interface Order {
 export interface Technician {
     id: string;
     name: string;
+    specialty: string;
     phone: string;
-    location: string;
   }
 
   export interface Hospital {

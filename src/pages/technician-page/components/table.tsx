@@ -24,7 +24,7 @@ export const Table: React.FC<TableProps> = ({ technicians }) => (
             >
               <td className="p-4">{tec.name}</td>
               <td className="p-4">{tec.phone}</td>
-              <td className="p-4">{tec.location}</td>
+              {/*<td className="p-4">{tec.location}</td>*/}
               <td className="p-4">
                 <button
                   type="button"

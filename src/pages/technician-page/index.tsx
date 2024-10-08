@@ -1,67 +1,66 @@
+import { useEffect, useState } from "react";
+import { readDataOnce } from "../../lib/api";
 import { Table } from "./components/table";
 
-const technicians = [
-  {
-    id: "0",
-    name: "Dr. John Smith",
-    phone: "(11) 98765-4321",
-    location: "São Paulo - SP",
-  },
-  {
-    id: "1",
-    name: "Dr. Jane Doe",
-    phone: "(21) 97654-3210",
-    location: "Rio de Janeiro - RJ",
-  },
-  {
-    id: "2",
-    name: "Dr. Robert Johnson",
-    phone: "(31) 96543-2109",
-    location: "Belo Horizonte - MG",
-  },
-  {
-    id: "3",
-    name: "Dr. Lisa Davis",
-    phone: "(41) 95432-1098",
-    location: "Curitiba - PR",
-  },
-  {
-    id: "4",
-    name: "Dr. Michael Brown",
-    phone: "(51) 94321-0987",
-    location: "Porto Alegre - RS",
-  },
-  {
-    id: "5",
-    name: "Dr. Jennifer Miller",
-    phone: "(61) 93210-9876",
-    location: "Brasília - DF",
-  },
-  {
-    id: "6",
-    name: "Dr. William Wilson",
-    phone: "(71) 92109-8765",
-    location: "Salvador - BA",
-  },
-  {
-    id: "7",
-    name: "Dr. Emily Taylor",
-    phone: "(81) 91098-7654",
-    location: "Recife - PE",
-  },
-  {
-    id: "8",
-    name: "Dr. David Martinez",
-    phone: "(91) 90987-6543",
-    location: "Belém - PA",
-  },
-];
-
 export const TechnicianShower = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTechnicians = async () => {
+      try {
+        console.log("Fetching technicians...");
+        const fetchedData = await readDataOnce(`tecnicos/`);
+        if (fetchedData) {
+          // Transformando os dados no formato [{id, name, phone, specialty}]
+          const transformedData = Object.entries(fetchedData).map(
+            ([id, technician]: [string, any]) => ({
+              id,
+              name: technician.name,
+              phone: technician.phone,
+              specialty: technician.specialty,
+            })
+          );
+          console.log(
+            "Technicians fetched and transformed successfully:",
+            transformedData
+          );
+          setData(transformedData);
+        } else {
+          console.log("No data found for technicians.");
+          setData([]);
+        }
+      } catch (err) {
+        console.error("Error fetching technicians:", err);
+        setError("Error fetching technicians. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTechnicians();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
+        <span className="text-white ml-4">
+          Carregando dados dos técnicos...
+        </span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">{error}</div>;
+  }
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Técnicos</h1>
-      <Table technicians={technicians} />
+      <Table technicians={data} />
     </div>
   );
 };
