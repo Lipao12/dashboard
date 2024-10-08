@@ -13,7 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import { useOSContext } from "../../context/OSContext";
-import { Order } from "../../types/types";
+import { OS } from "../../types/types";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 const chartColors = {
@@ -24,7 +24,7 @@ const chartColors = {
 };
 
 export const Dashboard = () => {
-  const { filteredOrders } = useOSContext();
+  const { filteredOrders, loading } = useOSContext();
   const [filter, setFilter] = useState("ano");
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
@@ -41,9 +41,10 @@ export const Dashboard = () => {
   const filteredByPeriod = () => {
     const now = new Date();
 
-    return filteredOrders.filter((order: Order) => {
-      const [day, month, year] = order.day.split("/");
-      const orderDate = new Date(`${year}-${month}-${day}`);
+    return filteredOrders.filter((order: OS) => {
+      //const [day, month, year] = order.date.split("/");
+      ///const orderDate = new Date(`${year}-${month}-${day}`);
+      const orderDate = new Date(order.date);
 
       console.log(selectedYear);
       console.log(orderDate.getFullYear());
@@ -80,20 +81,20 @@ export const Dashboard = () => {
     {
       name: "Progresso",
       count: filteredByPeriod().filter(
-        (task: Order) => task.status === "Progresso"
+        (task: OS) => task.status === "Progresso"
       ).length,
     },
     {
       name: "Concluído",
       count: filteredByPeriod().filter(
-        (task: Order) => task.status === "Concluido"
+        (task: OS) => task.status === "Concluido"
       ).length,
     },
   ];
 
   // Função para contar o número de ordens por prioridade
   const taskDistribution = filteredByPeriod().reduce(
-    (acc: { name: string; count: number }[], task: Order) => {
+    (acc: { name: string; count: number }[], task: OS) => {
       const existingPriority = acc.find((item) => item.name === task.priority);
       if (existingPriority) {
         existingPriority.count += 1;
@@ -104,6 +105,17 @@ export const Dashboard = () => {
     },
     []
   );
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
+        <span className="text-white ml-4">
+          Carregando dados dos técnicos...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4">

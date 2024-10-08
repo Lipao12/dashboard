@@ -65,4 +65,6 @@ export interface Technician {
     status: string; 
     testsFunc: boolean;
     userID: string;
+    date: string;
+    priority: string;
   }

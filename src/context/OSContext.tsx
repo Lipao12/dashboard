@@ -1,34 +1,83 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
-import { order } from "../../public/os";
-import { Order } from "../types/types";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { readDataOnce } from "../lib/api";
+import { OS } from "../types/types";
 
 interface OSContextProps {
-  orders: Order[];
+  orders: OS[];
   searchTerm: string;
   filter: string;
   showModal: boolean;
-  selectedOrder: Order | null;
+  selectedOrder: OS | null;
   orderQnt: number;
+  loading: boolean;
   setSearchTerm: (term: string) => void;
   setFilter: (status: string) => void;
-  handleOpenModal: (order: Order) => void;
+  handleOpenModal: (order: OS) => void;
   handleCloseModal: () => void;
-  filteredOrders: Order[];
-  addOrder: (newOrder: Order) => void;
+  filteredOrders: OS[];
+  addOrder: (newOrder: OS) => void;
 }
 
 const OSContext = createContext<OSContextProps | undefined>(undefined);
 
 const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [orders, setOrders] = useState<Order[]>(order);
+  const [orders, setOrders] = useState<OS[]>([]);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filter, setFilter] = useState<string>("Todas");
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [orderQnt, setOrderQnt] = useState(orders.length);
+  const [selectedOrder, setSelectedOrder] = useState<OS | null>(null);
+  const [orderQnt, setOrderQnt] = useState(0);
 
-  const addOrder = (newOrder: Order) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Função para processar os dados recebidos do Firebase
+    const processOrdersData = (data: any): OS[] => {
+      const ordersArray: OS[] = [];
+
+      // Itera sobre cada dia (chave no objeto principal)
+      Object.keys(data).forEach((date) => {
+        const dayOrders = data[date]; // Objeto com as ordens do dia
+
+        // Itera sobre cada ordem dentro do dia
+        Object.keys(dayOrders).forEach((orderId) => {
+          const orderData = dayOrders[orderId];
+
+          // Adiciona a data e o ID ao objeto de ordem
+          const orderWithDateAndId: OS = {
+            id: orderId,
+            date, // Adicionando a data
+            ...orderData, // Resto dos dados da ordem
+          };
+
+          // Adiciona a ordem processada ao array
+          ordersArray.push(orderWithDateAndId);
+        });
+      });
+
+      return ordersArray;
+    };
+
+    // Lê os dados do Firebase e processa
+    readDataOnce(`ordem_de_servico/`).then((data: any) => {
+      if (data) {
+        const processedOrders = processOrdersData(data);
+        setOrders(processedOrders);
+        setOrderQnt(processedOrders.length); // Atualiza a quantidade de ordens
+      }
+    });
+
+    setLoading(false);
+  }, []);
+
+  const addOrder = (newOrder: OS) => {
     setOrders((prevOrders) => {
       const updatedOrders = [...prevOrders, newOrder];
       setOrderQnt(updatedOrders.length);
@@ -36,7 +85,7 @@ const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
-  const handleOpenModal = (order: Order) => {
+  const handleOpenModal = (order: OS) => {
     setSelectedOrder(order);
     setShowModal(true);
   };
@@ -50,9 +99,9 @@ const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     if (filter !== "Todas" && order.status !== filter) return false;
     if (searchTerm === "") return true;
     return (
-      order.technician.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.hospital.toLowerCase().includes(searchTerm.toLowerCase())
+      order.userID.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.equipment.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.client.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -66,6 +115,7 @@ const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         selectedOrder,
         orderQnt,
         filteredOrders,
+        loading,
         setSearchTerm,
         setFilter,
         handleOpenModal,

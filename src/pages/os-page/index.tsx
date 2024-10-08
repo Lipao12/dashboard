@@ -25,6 +25,8 @@ export const OSshower = () => {
     setFilter(status);
   };
 
+  console.log(filteredOrders);
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Ordem de serviços</h1>

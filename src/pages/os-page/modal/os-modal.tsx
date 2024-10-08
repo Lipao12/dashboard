@@ -1,14 +1,8 @@
 import { FiX } from "react-icons/fi";
+import { OS } from "../../../types/types";
 
 interface OsModalProps {
-  order: {
-    id: string;
-    day: string;
-    technician: string;
-    product: string;
-    hospital: string;
-    status: string;
-  };
+  order: OS;
   setShowModal: () => void;
 }
 
@@ -26,16 +20,16 @@ export const OsModal = ({ order, setShowModal }: OsModalProps) => {
           </div>
           <div className="mt-4">
             <p>
-              <strong>Dia:</strong> {order.day}
+              <strong>Dia:</strong> {order.date}
             </p>
             <p>
-              <strong>Técnico:</strong> {order.technician}
+              <strong>Inspeção:</strong> {order.inspection}
             </p>
             <p>
-              <strong>Equipamento:</strong> {order.product}
+              <strong>Equipamento:</strong> {order.equipment.model}
             </p>
             <p>
-              <strong>Hospital:</strong> {order.hospital}
+              <strong>Hospital:</strong> {order.client.name}
             </p>
             <p>
               <strong>Status:</strong> {order.status}
