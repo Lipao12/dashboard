@@ -55,6 +55,8 @@ export const OSForm = () => {
       locale: ptBR,
     });
 
+    console.log(typeof formattedDate);
+
     const orderToAdd: Order = {
       ...newOrder,
       id: Date.now().toString(),
