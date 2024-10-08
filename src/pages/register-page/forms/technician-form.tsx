@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { pushData } from "../../../lib/api";
 
-export const TechnicianForm = () => {
+interface TechnicianFormProps {
+  showToast: (message: string) => void; // Definindo a prop showToast
+}
+
+export const TechnicianForm: React.FC<TechnicianFormProps> = ({
+  showToast,
+}) => {
   const [newTechnician, setNewTechnician] = useState({
     name: "",
     specialty: "",
@@ -21,6 +27,8 @@ export const TechnicianForm = () => {
     e.preventDefault();
 
     pushData(`tecnicos/`, newTechnician);
+
+    showToast("Técnico cadastrado com sucesso!");
 
     setNewTechnician({
       name: "",

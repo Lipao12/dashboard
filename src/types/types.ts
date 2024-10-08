@@ -23,3 +23,46 @@ export interface Technician {
     phone: string;
     address: string;
   }
+
+  export interface Activity {
+    activity: string; 
+    start: string;    
+    end: string;      
+    technician: string; 
+  }
+
+  export interface Client {
+    address: string;
+    contact: string;
+    email: string;
+    id: string;
+    name: string;
+    phone: string;
+    sector: string;
+  }
+
+  export interface Equipment {
+    brand: string;
+    defect: string;
+    description: string;
+    equipment: string;
+    equipmentNotes: string;
+    model: string;
+    patrimony: string;
+    serialNumber: string;
+    tag: string;
+  }
+
+  export interface OS {
+    id: string,
+    activities: Activity[];
+    cleaning: boolean;
+    client: Client;
+    equipment: Equipment;
+    fitUse: boolean;
+    inspection: boolean;
+    obs: string;
+    status: string; 
+    testsFunc: boolean;
+    userID: string;
+  }

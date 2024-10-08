@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { FiX } from "react-icons/fi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { HospitalForm } from "./forms/hospital-form";
 import { OSForm } from "./forms/os-form";
 import { StorageForm } from "./forms/storage-form";
@@ -19,8 +21,13 @@ export const RegisterIndex = () => {
     setSelectedForm(item);
   };
 
+  const showToast = (message: string) => {
+    toast.success(message);
+  };
+
   return (
     <div className="flex flex-col p-4">
+      <ToastContainer />
       <h1 className="text-2xl font-bold mb-4">Cadastro</h1>
 
       <div className="mb-6">
@@ -86,7 +93,9 @@ export const RegisterIndex = () => {
           </div>
 
           <div className="bg-[#1C2126] p-4 rounded-md text-black">
-            {selectedForm === "technician" && <TechnicianForm />}
+            {selectedForm === "technician" && (
+              <TechnicianForm showToast={showToast} /> // Passando showToast para TechnicianForm
+            )}
             {selectedForm === "os" && <OSForm />}
             {selectedForm === "hospital" && <HospitalForm />}
             {selectedForm === "stock" && <StorageForm />}
