@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { readDataOnce } from "../lib/api";
+import { pushData, readDataOnce } from "../lib/api";
 import { OS } from "../types/types";
 
 interface OSContextProps {
@@ -78,11 +78,10 @@ const OSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const addOrder = (newOrder: OS) => {
-    setOrders((prevOrders) => {
-      const updatedOrders = [...prevOrders, newOrder];
-      setOrderQnt(updatedOrders.length);
-      return updatedOrders;
-    });
+    const today = new Date().toISOString().split("T")[0];
+    const path = `ordem_de_servico/${today}`;
+    const { date, id, ...processOS } = newOrder;
+    pushData(path, processOS);
   };
 
   const handleOpenModal = (order: OS) => {

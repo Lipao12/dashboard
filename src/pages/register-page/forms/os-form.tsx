@@ -10,14 +10,7 @@ export const OSForm = () => {
   const [showImportButton, setShowImportButton] = useState(false);
   const [newOrder, setNewOrder] = useState<OS>({
     id: "",
-    activities: [
-      {
-        activity: "",
-        start: "",
-        end: "",
-        technician: "",
-      },
-    ],
+    activities: null,
     cleaning: false,
     client: {
       address: "",
@@ -42,9 +35,18 @@ export const OSForm = () => {
     fitUse: false,
     inspection: false,
     obs: "",
-    status: "Fazer",
+    status: "Progresso",
     testsFunc: false,
-    userID: "", // Adicione o ID do usuário conforme necessário
+    userID: "",
+    date: "",
+    priority: "",
+  });
+
+  const [currentActivity, setCurrentActivity] = useState<Activity>({
+    activity: "",
+    start: "",
+    end: "",
+    technician: "",
   });
 
   const headersMapping: any = {
@@ -60,20 +62,33 @@ export const OSForm = () => {
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    activityIndex?: number // Para tratar atividades
+    field?: string
   ) => {
     const { name, value } = e.target;
 
-    if (activityIndex !== undefined) {
-      // Atualizando atividades
-      setNewOrder((prevOrder: OS) => {
-        const updatedActivities = [...prevOrder.activities];
-        updatedActivities[activityIndex] = {
-          ...updatedActivities[activityIndex],
+    if (field === "activity") {
+      setCurrentActivity((prevActivity) => ({
+        ...prevActivity,
+        [name]: value,
+      }));
+    } else if (name in newOrder.client) {
+      // Atualizando campos do cliente
+      setNewOrder((prevOrder: OS) => ({
+        ...prevOrder,
+        client: {
+          ...prevOrder.client,
           [name]: value,
-        };
-        return { ...prevOrder, activities: updatedActivities };
-      });
+        },
+      }));
+    } else if (name in newOrder.equipment) {
+      // Atualizando campos dos equipamentos
+      setNewOrder((prevOrder: OS) => ({
+        ...prevOrder,
+        equipment: {
+          ...prevOrder.equipment,
+          [name]: value,
+        },
+      }));
     } else {
       // Atualizando outros campos
       setNewOrder((prevOrder: OS) => ({
@@ -81,6 +96,45 @@ export const OSForm = () => {
         [name]: value,
       }));
     }
+  };
+
+  const addActivity = () => {
+    if (
+      !currentActivity.activity ||
+      !currentActivity.start ||
+      !currentActivity.end ||
+      !currentActivity.technician
+    ) {
+      alert(
+        "Por favor, preencha todos os campos da atividade antes de adicionar."
+      );
+      return;
+    }
+
+    setNewOrder((prevOrder: OS) => ({
+      ...prevOrder,
+      activities: [
+        ...(prevOrder.activities || []), // Garantir que activities seja um array
+        currentActivity,
+      ],
+    }));
+
+    // Reset currentActivity após adicionar
+    setCurrentActivity({
+      activity: "",
+      start: "",
+      end: "",
+      technician: "",
+    });
+  };
+
+  const removeActivity = (index: number) => {
+    setNewOrder((prevOrder: OS) => {
+      const updatedActivities = (prevOrder.activities || []).filter(
+        (_, i) => i !== index
+      );
+      return { ...prevOrder, activities: updatedActivities };
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -130,18 +184,12 @@ export const OSForm = () => {
       status: "Fazer",
       testsFunc: false,
       userID: "",
+      date: "",
+      priority: "",
     });
   };
 
-  const addActivity = () => {
-    setNewOrder((prevOrder: OS) => ({
-      ...prevOrder,
-      activities: [
-        ...prevOrder.activities,
-        { activity: "", start: "", end: "", technician: "" },
-      ],
-    }));
-  };
+  console.log(newOrder.client);
 
   return (
     <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
@@ -281,72 +329,87 @@ export const OSForm = () => {
       {/* Seção de Atividades */}
       <div>
         <h3 className="text-lg font-semibold text-gray-300">Atividades</h3>
-        {newOrder.activities.map((activity: Activity, index: number) => (
-          <div key={index} className="flex flex-col mb-3 space-y-3">
-            <input
-              type="text"
-              name="activity"
-              className="p-2 border rounded-md mb-1"
-              value={activity.activity}
-              onChange={(e) => handleInputChange(e, index)}
-              placeholder="Descrição da Atividade"
-              required
-            />
-            <input
-              type="time"
-              placeholder="-"
-              name="start"
-              className="p-2 border rounded-md mb-1"
-              value={activity.start}
-              onChange={(e) => handleInputChange(e, index)}
-              required
-            />
-            <input
-              type="time"
-              placeholder="-"
-              name="end"
-              className="p-2 border rounded-md mb-1"
-              value={activity.end}
-              onChange={(e) => handleInputChange(e, index)}
-              required
-            />
-            <input
-              type="text"
-              name="technician"
-              className="p-2 border rounded-md mb-1"
-              value={activity.technician}
-              onChange={(e) => handleInputChange(e, index)}
-              placeholder="Técnico Responsável"
-              required
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addActivity}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
-        >
-          Adicionar Atividade
-        </button>
+        <div className="flex flex-row space-x-3 mb-4">
+          <input
+            type="text"
+            name="activity"
+            className="p-2 border rounded-md"
+            value={currentActivity.activity}
+            onChange={(e) => handleInputChange(e, "activity")}
+            placeholder="Descrição da Atividade"
+          />
+          <input
+            type="time"
+            name="start"
+            className="p-2 border rounded-md"
+            value={currentActivity.start}
+            onChange={(e) => handleInputChange(e, "activity")}
+          />
+          <input
+            type="time"
+            name="end"
+            className="p-2 border rounded-md"
+            value={currentActivity.end}
+            onChange={(e) => handleInputChange(e, "activity")}
+          />
+          <input
+            type="text"
+            name="technician"
+            className="p-2 border rounded-md"
+            value={currentActivity.technician}
+            onChange={(e) => handleInputChange(e, "activity")}
+            placeholder="Técnico Responsável"
+          />
+          <button
+            type="button"
+            onClick={addActivity}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          >
+            Adicionar Atividade
+          </button>
+        </div>
+
+        {/* Tabela de atividades */}
+        {newOrder.activities && newOrder.activities.length > 0 && (
+          <table className="table-auto w-full bg-white rounded-md overflow-hidden">
+            <thead>
+              <tr className="bg-gray-700 text-white">
+                <th className="p-2">Atividade</th>
+                <th className="p-2">Início</th>
+                <th className="p-2">Fim</th>
+                <th className="p-2">Técnico</th>
+                <th className="p-2">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {newOrder.activities.map((activity, index) => (
+                <tr key={index} className="text-center border-b">
+                  <td className="p-2">{activity.activity}</td>
+                  <td className="p-2">{activity.start}</td>
+                  <td className="p-2">{activity.end}</td>
+                  <td className="p-2">{activity.technician}</td>
+                  <td className="p-2">
+                    <button
+                      type="button"
+                      onClick={() => removeActivity(index)}
+                      className="bg-red-500 text-white px-2 py-1 rounded-md"
+                    >
+                      Remover
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
-      {/* Observações */}
-      <textarea
-        name="obs"
-        className="p-2 border rounded-md"
-        value={newOrder.obs}
-        onChange={handleInputChange}
-        placeholder="Observações"
-      />
-
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500 transition duration-300"
-        >
-          Cadastrar OS
-        </button>
-      </div>
+      <button
+        type="submit"
+        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-400 transition duration-300"
+      >
+        Salvar Ordem de Serviço
+      </button>
     </form>
   );
 };

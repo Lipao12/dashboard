@@ -55,7 +55,7 @@ export interface Technician {
 
   export interface OS {
     id: string,
-    activities: Activity[];
+    activities: Activity[] | null;
     cleaning: boolean;
     client: Client;
     equipment: Equipment;
